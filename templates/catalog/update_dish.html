@@ -1,0 +1,68 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Dish</title>
+</head>
+<body>
+    <h1>Update Dish</h1>
+    <form method="post" id="update-dish-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Dish</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dishes = {{ form.dishes_data|safe }};
+            const dishNameField = document.getElementById('id_dish_name');
+            const newDishTypeField = document.getElementById('id_new_dish_type');
+
+            // Function to update dish type choices based on selected dish name
+            function updateDishTypeChoices() {
+                const selectedDishName = dishNameField.value;
+                let currentDishType = '';
+
+                // Find the current dish type of the selected dish name
+                for (const [dishType, dishList] of Object.entries(dishes)) {
+                    if (dishList.hasOwnProperty(selectedDishName)) {
+                        currentDishType = dishType;
+                        break;
+                    }
+                }
+
+                // Clear current options
+                newDishTypeField.innerHTML = '';
+
+                // Populate new dish type choices
+                for (const dishType in dishes) {
+                    const option = document.createElement('option');
+                    option.value = dishType;
+                    option.textContent = dishType.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());  // Capitalize dish type
+                    if (dishType === currentDishType) {
+                        option.selected = true;
+                    }
+                    newDishTypeField.appendChild(option);
+                }
+            }
+
+            // Initialize dish type choices on page load
+            updateDishTypeChoices();
+
+            // Update dish type choices when dish name changes
+            dishNameField.addEventListener('change', updateDishTypeChoices);
+        });
+    </script>
+
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+<a href="{% url 'home' %}">Back to Home</a>
+
+</body>
+</html>
