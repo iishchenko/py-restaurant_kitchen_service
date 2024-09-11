@@ -3,6 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 from django import template
+from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -12,40 +13,51 @@ from app.forms import DishTypeForm, CreateDishForm, UpdateDishForm, DeleteDishFo
 from app.utils import add_dish_type, create_dish, update_dish, delete_dish, get_cook_for_dish, get_total_dish_types, get_total_dishes, count_cooks, initialize_data
 
 
-def get_cook_for_dish_view(request):
-    message = ""
-    if request.method == 'POST':
-        form = GetCookForDishForm(request.POST)
+class GetCookForDishView(View):
+    template_name = 'catalog/get_cook_for_dish.html'
+    form_class = GetCookForDishForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form, 'message': ""})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        message = ""
         if form.is_valid():
             dish_name = form.cleaned_data['dish_name']
             message = get_cook_for_dish(dish_name)
-            return render(request, 'catalog/get_cook_for_dish.html', {'form': form, 'message': message})
-    else:
-        form = GetCookForDishForm()
-
-    return render(request, 'catalog/get_cook_for_dish.html', {'form': form, 'message': message})
+        return render(request, self.template_name, {'form': form, 'message': message})
 
 
-def delete_dish_view(request):
-    message = ""
-    if request.method == 'POST':
-        form = DeleteDishForm(request.POST)
+class DeleteDishView(View):
+    template_name = 'catalog/delete_dish.html'
+    form_class = DeleteDishForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form, 'message': ""})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        message = ""
         if form.is_valid():
             dish_name = form.cleaned_data['dish_name']
             message = delete_dish(dish_name)
-
-            # Redirect to a success page or a list of dishes after deletion
-            return render(request, 'catalog/delete_dish.html', {'form': form, 'message': message})
-    else:
-        form = DeleteDishForm()
-
-    return render(request, 'catalog/delete_dish.html', {'form': form, 'message': message})
+        return render(request, self.template_name, {'form': form, 'message': message})
 
 
-def update_dish_view(request):
-    message = ""
-    if request.method == 'POST':
-        form = UpdateDishForm(request.POST)
+class UpdateDishView(View):
+    template_name = 'catalog/update_dish.html'
+    form_class = UpdateDishForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form, 'message': ""})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        message = ""
         if form.is_valid():
             dish_name = form.cleaned_data['dish_name']
             new_dish_name = form.cleaned_data.get('new_dish_name')
@@ -54,6 +66,7 @@ def update_dish_view(request):
             new_ingredients = form.cleaned_data.get('new_ingredients')
             price = form.cleaned_data.get('price')
 
+            # Update the dish using the helper function
             message = update_dish(
                 dish_name,
                 new_dish_name=new_dish_name,
@@ -62,32 +75,41 @@ def update_dish_view(request):
                 new_ingredients=new_ingredients.split(',') if new_ingredients else None,
                 price=price
             )
-            form = UpdateDishForm()
-            return render(request, 'catalog/update_dish.html', {'form': form, 'message': message})
-    else:
-        form = UpdateDishForm()
 
-    return render(request, 'catalog/update_dish.html', {'form': form, 'message': message})
+            # Reset the form after successful update
+            form = self.form_class()
+
+        return render(request, self.template_name, {'form': form, 'message': message})
 
 
-def add_dish_type_view(request):
-    message = ""
-    if request.method == 'POST':
-        form = DishTypeForm(request.POST)
+class AddDishTypeView(View):
+    template_name = 'catalog/dish_type.html'
+    form_class = DishTypeForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form, 'message': ""})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        message = ""
         if form.is_valid():
             new_dish_type = form.cleaned_data['dish_type']
             message = add_dish_type(new_dish_type)
-            return render(request, 'catalog/dish_type.html', {'form': form, 'message': message})
-    else:
-        form = DishTypeForm()
-
-    return render(request, 'catalog/dish_type.html', {'form': form, 'message': message})
+        return render(request, self.template_name, {'form': form, 'message': message})
 
 
-def create_dish_view(request):
-    message = ""
-    if request.method == 'POST':
-        form = CreateDishForm(request.POST)
+class CreateDishView(View):
+    template_name = 'catalog/create_dish.html'
+    form_class = CreateDishForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form, 'message': ""})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        message = ""
         if form.is_valid():
             dish_name = form.cleaned_data['dish_name']
             dish_type = form.cleaned_data['dish_type']
@@ -95,12 +117,13 @@ def create_dish_view(request):
             ingredients = form.cleaned_data['ingredients'].split(',')  # Convert input string to list
             price = form.cleaned_data['price']
 
+            # Create the new dish
             message = create_dish(dish_name, dish_type, cook_name, ingredients, price)
-            form = CreateDishForm()  # Reset the form after submission
-    else:
-        form = CreateDishForm()
 
-    return render(request, 'catalog/create_dish.html', {'form': form, 'message': message})
+            # Reset the form after submission
+            form = self.form_class()
+
+        return render(request, self.template_name, {'form': form, 'message': message})
 
 
 #@login_required(login_url="/login/")

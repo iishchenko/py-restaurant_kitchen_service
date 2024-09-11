@@ -1,5 +1,5 @@
 from django import forms
-from app.utils import dishes
+from app.initial_data import dishes
 
 
 class DishTypeForm(forms.Form):
