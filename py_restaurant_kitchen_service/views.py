@@ -1,20 +1,14 @@
-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-from django import template
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from app.forms import DishTypeForm, CreateDishForm, UpdateDishForm, DeleteDishForm, GetCookForDishForm
 from app.utils import add_dish_type, create_dish, update_dish, delete_dish, get_cook_for_dish, get_total_dish_types, get_total_dishes, count_cooks, initialize_data, create_cook
 from django.views.generic import TemplateView
 from django.template import TemplateDoesNotExist
 from app.forms import CreateCookForm
-from app.models import Dish
 
 
 class DeleteDishView(View):

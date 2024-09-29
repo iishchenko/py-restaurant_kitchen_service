@@ -3,3 +3,5 @@ my_database.db
 venv/
 .idea
 __ pycache __/
+.DS_Store
+py_restaurant_kitchen_service/.env
