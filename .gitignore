@@ -2,4 +2,7 @@ db.sqlite3
 my_database.db
 venv/
 .idea
-__ pycache __/
+__pycache__/
+.DS_Store
+py_restaurant_kitchen_service/.env
+*.pyc
