@@ -11,9 +11,10 @@ class Ingredient(models.Model):
 
 
 class Cook(AbstractUser):
-    years_of_experience = models.IntegerField()
+    username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    years_of_experience = models.IntegerField()
 
 
 class Dish(models.Model):
@@ -22,4 +23,7 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
     cooks = models.ManyToManyField(Cook)
-    ingredients = models.ManyToManyField(Ingredient)
+    ingredients = models.ManyToManyField(Ingredient, related_name='dishes')
+
+    def __str__(self):
+        return self.name

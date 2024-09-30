@@ -17,15 +17,16 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from py_restaurant_kitchen_service import views
-from py_restaurant_kitchen_service.views import GetCookForDishView, DeleteDishView, UpdateDishView, AddDishTypeView, CreateDishView
+from py_restaurant_kitchen_service.views import GetCookForDishView, DeleteDishView, UpdateDishView, AddDishTypeView, CreateDishView, IndexView, PagesView, CreateCookView
 
 urlpatterns = [
                   # The home page
-                  path('', views.index, name='home'),  # Ensure 'index' view exists in views.py
+                  path('', IndexView.as_view(), name='home'),  # Ensure 'index' view exists in views.py
 
                   # Route for adding dish type
                   path('dish_type/', AddDishTypeView.as_view(), name='dish_type'),
+
+                  path('create_cook/', CreateCookView.as_view(), name='create_cook'),
 
                   path('create_dish/', CreateDishView.as_view(), name='create_dish'),
 
@@ -35,6 +36,6 @@ urlpatterns = [
 
                   path('get_cook_for_dish/', GetCookForDishView.as_view(), name='get_cook_for_dish'),
 
-                  path(r'^.*\.*', views.pages, name='pages'),
+                  path(r'^.*\.*', PagesView.as_view(), name='pages'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
