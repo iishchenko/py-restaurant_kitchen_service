@@ -19,7 +19,7 @@ Python3 must be already installed
 git clone https://github.com/iishchenko/py-restaurant_kitchen_service
 python3 -m venv venv
 source venv/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 python manage.py runserver
 
 '''
