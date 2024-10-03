@@ -10,3 +10,16 @@ This Django application is designed to manage a system where cooks can create ne
 - **Ingredient Management:** Add and manage ingredients, with a many-to-many relationship to dishes.
 - **Dynamic Forms:** Update dishes through forms with dropdown lists of existing dish names.
 
+## Installation 
+
+Python3 must be already installed
+
+'''shell
+
+git clone https://github.com/iishchenko/py-restaurant_kitchen_service
+python3 -m venv venv
+source venv/bin/activate
+pip install requirements.txt
+python manage.py runserver
+
+'''
