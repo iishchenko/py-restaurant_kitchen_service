@@ -1,8 +1,6 @@
 my_database.db
-venv/
 .idea
 .DS_Store
-py_restaurant_kitchen_service/.env
 
 ### Django ###
 *.log
