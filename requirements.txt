@@ -39,5 +39,6 @@ six==1.16.0
 sqlparse==0.4.2
 toml==0.10.2
 tomli==2.0.1
+uvicorn==0.31.0
 virtualenv==20.26.6
 whitenoise==5.3.0
