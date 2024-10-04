@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "") != False
 
-ALLOWED_HOSTS = ["127.0.0.1", "py-restaurant-kitchen-service.onrender.com'"]
+ALLOWED_HOSTS = ["127.0.0.1", "py-restaurant-kitchen-service.onrender.com"]
 
 
 # Application definition
