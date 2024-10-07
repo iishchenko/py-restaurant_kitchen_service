@@ -25,6 +25,10 @@ SECRET_KEY = env('SECRET_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
+
+LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
