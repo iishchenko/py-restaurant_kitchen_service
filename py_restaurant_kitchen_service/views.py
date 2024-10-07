@@ -62,12 +62,12 @@ class LogoutView(View):
         # Log out the user when accessing the logout page via GET request
         logout(request)
         # Redirect to the login page or any other page after logout
-        return redirect('login')  # Replace 'login' with your desired URL
+        return redirect('logout')  # Replace 'login' with your desired URL
 
     def post(self, request, *args, **kwargs):
         # Log out the user when the logout form is submitted
         logout(request)
-        return redirect('login')  # Or render a logout confirmation page if needed
+        return redirect('logout')  # Or render a logout confirmation page if needed
 
 
 class AddDishTypeView(FormView):
