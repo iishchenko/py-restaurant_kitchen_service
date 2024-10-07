@@ -1,6 +1,8 @@
 my_database.db
 .idea
 .DS_Store
+Pipfile
+Pipfile.lock
 
 ### Django ###
 *.log
