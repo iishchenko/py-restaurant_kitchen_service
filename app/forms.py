@@ -1,5 +1,70 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from app.models import DishType, Cook, Dish
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class SignUpForm(UserCreationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Username",
+                "class": "form-control"
+            }
+        ),
+        max_length=150,
+        required=True
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email",
+                "class": "form-control"
+            }
+        ),
+        required=True
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password",
+                "class": "form-control"
+            }
+        ),
+        required=True
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password check",
+                "class": "form-control"
+            }
+        ),
+        required=True
+    )
+    years_of_experience = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                "placeholder": "Years of Experience",
+                "class": "form-control"
+            }
+        ),
+        required=True
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', 'years_of_experience')
+
+    def save(self, commit=True):
+        user = super(SignUpForm, self).save(commit=False)
+        user.years_of_experience = self.cleaned_data["years_of_experience"]
+        if commit:
+            user.save()
+        return user
 
 
 class DishTypeForm(forms.Form):

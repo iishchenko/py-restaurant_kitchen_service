@@ -16,12 +16,25 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 from django.urls import path
-from py_restaurant_kitchen_service.views import GetCookForDishView, DeleteDishView, UpdateDishView, AddDishTypeView, CreateDishView, IndexView, PagesView, CreateCookView
+from django.contrib.auth import views as auth_views
+from py_restaurant_kitchen_service.views import RegisterUserView, GetCookForDishView, DeleteDishView, UpdateDishView, \
+    AddDishTypeView, CreateDishView, IndexView, PagesView, CreateCookView, SignUpView, SignInView
 
 urlpatterns = [
                   # The home page
                   path('', IndexView.as_view(), name='home'),  # Ensure 'index' view exists in views.py
+
+                  path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+
+                  path('register/', RegisterUserView.as_view(), name='register'),
+
+                  path('signup/', SignUpView.as_view(), name='signup'),
+
+                  path('signin/', SignInView.as_view(), name='signin'),
+
+                  path("logout/", LogoutView.as_view(), name="logout"),
 
                   # Route for adding dish type
                   path('dish_type/', AddDishTypeView.as_view(), name='dish_type'),

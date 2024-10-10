@@ -1,0 +1,35 @@
+{% extends "layout/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+Hi {{ user.username }}!
+
+<form action="{% url 'logout' %}" method="post">
+
+  {% csrf_token %}
+
+  <button type="submit">Log Out</button>
+
+</form>
+
+{% else %}
+
+<p>You are not logged in</p>
+
+<a href="{% url 'login' %}">Log In</a>
+
+{% endif %}
+
+{% endblock %}
+
+<!-- Specific JS goes HERE -->
+
+{% block javascripts %}
+
+  <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+
+{% endblock javascripts %}

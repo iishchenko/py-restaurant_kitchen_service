@@ -1,25 +1,41 @@
-{% load static %}
+{% extends 'layout/base-presentation.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Cook for Dish</title>
-</head>
-<body>
-    <h1>Find Out Who Cooks the Dish</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Get Cook</button>
-    </form>
+{% block title %} Get Cook for Dish {% endblock title %}
 
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
+{% block body_class %} get-cook-page {% endblock body_class %}
 
-    <a href="{% url 'home' %}">Back to Home</a>
+{% block content %}
 
-</body>
-</html>
+  <section class="pt-3 pb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 mx-auto" id="specificElement">
+          <h1 class="text-center">Find Out Who Cooks the Dish</h1>
+          <form method="post" style="margin-left: 5cm;">
+            {% csrf_token %}
+            <div class="form-group">
+              {{ form.non_field_errors }}
+              {% for field in form %}
+                <div class="form-group">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {{ field.errors }}
+                </div>
+              {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Get Cook</button>
+          </form>
+
+          {% if message %}
+          <p class="text-success mt-3">{{ message }}</p>
+          {% endif %}
+
+          <div style="margin-left: 5cm;">
+            <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}

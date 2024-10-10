@@ -1,25 +1,30 @@
-{% load static %}
+{% extends 'layout/base-presentation.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Dish Type</title>
-</head>
-<body>
-    <h1>Add a New Dish Type</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Dish Type</button>
-    </form>
+{% block title %} Add Dish Type {% endblock title %}
 
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
+{% block body_class %} add-dish-type-page {% endblock body_class %}
 
-    <a href="{% url 'home' %}">Back to Home</a>
+{% block content %}
 
-</body>
-</html>
+  <section class="pt-3 pb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 text-center mx-auto" id="specificElement">
+          <h1>Add a New Dish Type</h1>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary mt-3">Add Dish Type</button>
+          </form>
+
+          {% if message %}
+          <p class="text-success mt-3">{{ message }}</p>
+          {% endif %}
+
+          <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}
