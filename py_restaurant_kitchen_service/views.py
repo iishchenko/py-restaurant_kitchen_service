@@ -423,7 +423,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return number_of_cooks
 
     def initialize_data(self):
-        result = "\nMenu:\n"  # Start with a "Menu" heading
+        result = ""  # Start with a "Menu" heading
 
         # Loop through each dish type
         dish_types = DishType.objects.prefetch_related('dish_set')  # Prefetch dishes related to each dish type
