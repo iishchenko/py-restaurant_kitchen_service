@@ -1,25 +1,30 @@
-{% load static %}
+{% extends 'layout/base-presentation.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Cook</title>
-</head>
-<body>
-    <h1>Create a New Cook</h1>
+{% block title %} Create Cook {% endblock title %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+{% block body_class %} create-cook-page {% endblock body_class %}
 
-        <button type="submit">Add Cook</button>
-    </form>
+{% block content %}
+  <section class="pt-3 pb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 mx-auto" id="specificElement">
+          <h1 class="text-center">Create a New Cook</h1>
+          <form method="post" style="margin-left: 5cm;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary mt-3">Add Cook</button>
+          </form>
 
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
+          {% if message %}
+            <p class="text-success mt-3">{{ message }}</p>
+          {% endif %}
 
-    <a href="{% url 'home' %}">Back to Home</a>
-</body>
-</html>
+          <div style="margin-left: 5cm;">
+            <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

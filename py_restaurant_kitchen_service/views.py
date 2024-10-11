@@ -1,15 +1,73 @@
+from django.contrib.auth import authenticate
 from django.views import View
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from app.forms import DishTypeForm, CreateDishForm, UpdateDishForm, DeleteDishForm, GetCookForDishForm
+from app.forms import DishTypeForm, CreateDishForm, UpdateDishForm, DeleteDishForm, GetCookForDishForm, SignUpForm
 from django.views.generic import TemplateView
 from django.template import TemplateDoesNotExist
 from app.forms import CreateCookForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 from app.models import DishType, Dish, Cook, Ingredient
+
+
+class RegisterUserView(View):
+    template_name = "accounts/register.html"
+
+    def get(self, request, *args, **kwargs):
+        form = SignUpForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = SignUpForm(request.POST)
+        msg = None
+        success = False
+
+        if form.is_valid():
+            user = form.save()  # Save the user instance
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
+
+            # Authenticate the user after registration
+            user = authenticate(username=username, password=raw_password)
+
+            if user is not None:
+                msg = 'User created - please <a href="/login">login</a>.'
+                success = True
+                return redirect("/login/")
+            else:
+                msg = 'Authentication failed. Please try again.'
+        else:
+            msg = 'Form is not valid: ' + str(form.errors)
+
+        return render(request, self.template_name, {"form": form, "msg": msg, "success": success})
+
+
+class SignUpView(TemplateView):
+    template_name = "catalog/page-sign-up.html"
+
+
+class SignInView(TemplateView):
+    template_name = "catalog/page-sign-in.html"
+
+
+class LogoutView(View):
+    template_name = 'accounts/logout.html'  # Adjust the path as needed
+
+    def get(self, request, *args, **kwargs):
+        # Log out the user when accessing the logout page via GET request
+        logout(request)
+        # Redirect to the login page or any other page after logout
+        return redirect('logout')  # Replace 'login' with your desired URL
+
+    def post(self, request, *args, **kwargs):
+        # Log out the user when the logout form is submitted
+        logout(request)
+        return redirect('logout')  # Or render a logout confirmation page if needed
 
 
 class AddDishTypeView(FormView):
@@ -323,7 +381,8 @@ class GetCookForDishView(FormView):
         return self.render_to_response(self.get_context_data(form=form, message="Please correct the errors below."))
 
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
+    login_url = 'login/'
     template_name = 'catalog/index.html'
 
     def get_context_data(self, **kwargs):
@@ -364,7 +423,7 @@ class IndexView(TemplateView):
         return number_of_cooks
 
     def initialize_data(self):
-        result = "\nMenu:\n"  # Start with a "Menu" heading
+        result = ""  # Start with a "Menu" heading
 
         # Loop through each dish type
         dish_types = DishType.objects.prefetch_related('dish_set')  # Prefetch dishes related to each dish type
@@ -394,7 +453,8 @@ class IndexView(TemplateView):
         return result  # Return the formatted string
 
 
-class PagesView(View):
+class PagesView(LoginRequiredMixin,View):
+    login_url = reverse_lazy('login')
 
     def get(self, request, *args, **kwargs):
         context = {}

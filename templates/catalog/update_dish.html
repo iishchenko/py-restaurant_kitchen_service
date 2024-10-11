@@ -1,68 +1,80 @@
+{% extends 'layout/base-presentation.html' %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Dish</title>
-</head>
-<body>
-    <h1>Update Dish</h1>
-    <form method="post" id="update-dish-form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Update Dish</button>
-    </form>
+{% block title %} Update Dish {% endblock title %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dishes = {{ form.dishes_data|safe }};
-            const dishNameField = document.getElementById('id_dish_name');
-            const newDishTypeField = document.getElementById('id_new_dish_type');
+{% block body_class %} update-dish-page {% endblock body_class %}
 
-            // Function to update dish type choices based on selected dish name
-            function updateDishTypeChoices() {
-                const selectedDishName = dishNameField.value;
-                let currentDishType = '';
+{% block content %}
 
-                // Find the current dish type of the selected dish name
-                for (const [dishType, dishList] of Object.entries(dishes)) {
-                    if (dishList.hasOwnProperty(selectedDishName)) {
-                        currentDishType = dishType;
-                        break;
-                    }
-                }
+  <section class="pt-3 pb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 mx-auto" id="specificElement">
+          <h1 class="text-center">Update Dish</h1>
+          <form method="post" id="update-dish-form" style="margin-left: 5cm;">
+            {% csrf_token %}
+            <div class="form-group">
+              {{ form.non_field_errors }}
+              {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Update Dish</button>
+          </form>
 
-                // Clear current options
-                newDishTypeField.innerHTML = '';
+          {% if message %}
+            <p class="text-success mt-3">{{ message }}</p>
+          {% endif %}
 
-                // Populate new dish type choices
-                for (const dishType in dishes) {
-                    const option = document.createElement('option');
-                    option.value = dishType;
-                    option.textContent = dishType.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());  // Capitalize dish type
-                    if (dishType === currentDishType) {
-                        option.selected = true;
-                    }
-                    newDishTypeField.appendChild(option);
+          <div style="margin-left: 5cm;">
+            <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dishes = {{ form.dishes_data|safe }};
+        const dishNameField = document.getElementById('id_dish_name');
+        const newDishTypeField = document.getElementById('id_new_dish_type');
+
+        // Function to update dish type choices based on selected dish name
+        function updateDishTypeChoices() {
+            const selectedDishName = dishNameField.value;
+            let currentDishType = '';
+
+            // Find the current dish type of the selected dish name
+            for (const [dishType, dishList] of Object.entries(dishes)) {
+                if (dishList.hasOwnProperty(selectedDishName)) {
+                    currentDishType = dishType;
+                    break;
                 }
             }
 
-            // Initialize dish type choices on page load
-            updateDishTypeChoices();
+            // Clear current options
+            newDishTypeField.innerHTML = '';
 
-            // Update dish type choices when dish name changes
-            dishNameField.addEventListener('change', updateDishTypeChoices);
-        });
-    </script>
+            // Populate new dish type choices
+            for (const dishType in dishes) {
+                const option = document.createElement('option');
+                option.value = dishType;
+                option.textContent = dishType.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());  // Capitalize dish type
+                if (dishType === currentDishType) {
+                    option.selected = true;
+                }
+                newDishTypeField.appendChild(option);
+            }
+        }
 
+        // Initialize dish type choices on page load
+        updateDishTypeChoices();
 
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
+        // Update dish type choices when dish name changes
+        dishNameField.addEventListener('change', updateDishTypeChoices);
+    });
+  </script>
 
-<a href="{% url 'home' %}">Back to Home</a>
+{% endblock content %}
 
-</body>
-</html>
