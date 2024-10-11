@@ -4,6 +4,10 @@ GitHub - https://github.com/iishchenko/py-restaurant_kitchen_service
 
 Website - https://py-restaurant-kitchen-service.onrender.com/
 
+Test user:
+login: user
+password: user12345
+
 This Django application is designed to manage a system where cooks can create new dishes, categorize them into types, and assign specific cooks to prepare each dish. The system also allows for managing ingredients and their associations with dishes. 
 
 ## Features
